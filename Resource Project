@@ -7,6 +7,15 @@ Both the forward (N2.R1) and reverse (N2.R2) reads need trimming since the fastq
 cutadapt -q 27,27 -a TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG -A GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG -m 50 --max-n 0 -o N2.R1.cutadapt.fastq -p N2.R2.cutadapt.fastq N2.R1.fastq N2.R2.fastq
 (phred score of 27 for each read, TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG as forward adaptor, GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG as reverse adaptor, minimum lenght is 50 while maximum lenght is 0)
 Total volume of quality trimmed in both reads (N2.R1 and N2.R2) was 16.6% while proportion of the both genome reads (N2.R1 and N2.R2) filtered was 83.4% 
+The total portion of the forward read (N2.R1) with the adaptor is 1.7% while only 1.6% of the reverse read (N2.R2) contains the adpator sequence
 wget https://sra-download.ncbi.nlm.nih.gov/traces/wgs03/wgs_aux/FW/YH/FWYH01/FWYH01.1.fsa_nt.gz (to get the reference sequence of N2)
 N2 is Planomicrobium okeanokoites
 gunzip FWYH01.1.fsa_nt.gz to unzip the reference sequence. Then head FWYH01.1.fsa_nt (to view the reference sequence). 
+bowtie2-build FWYH01.1.fsa_nt Ref.N2 (to index the reference sequence in FWYH01.1.fsa_nt)
+bowtie2 -x Ref.N2 -1 N2.R1.fastq -2 N2.R2.fastq -S N2.sam  (to map the index reference into the raw sequencing data reads)
+less or head N2.sam (view alignments in the N2 reference sequence and what N2 read alignments were mapped into reference)
+grep -c "@SQ" N2.sam (count the reference sequence in indexed N2 reference) and grep -c "M0" N2.sam (count the number of mapped reads in N2 forward and reverse (R1 and R2) to the reference sequence)
+The number of reference sequence indexed is 10 while the number of mapped reads in N2.sam is 2644333
+samtools view -b N2.sam | samtools sort - > N2.bam (To convert N2.sam to .bam file using samtools)
+samtools index N2.bam (Index the N2.bam file) 
+bcftools mpileup -f FWYH01.1.fsa_nt N2.bam | bcftools call -mv -Ob --ploidy 1 -o raw.calls_N2.bcf
