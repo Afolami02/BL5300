@@ -19,3 +19,13 @@ The number of reference sequence indexed is 10 while the number of mapped reads 
 samtools view -b N2.sam | samtools sort - > N2.bam (To convert N2.sam to .bam file using samtools)
 samtools index N2.bam (Index the N2.bam file) 
 bcftools mpileup -f FWYH01.1.fsa_nt N2.bam | bcftools call -mv -Ob --ploidy 1 -o raw.calls_N2.bcf
+bcftools filter --exclud 'QUAL < 30' raw.calls_N2.bcf > N2_calls.vcf (to filter the variant calls)
+grep -c "F" N2_calls.vcf (to count the number of variant calls in the mapped read). The total variant calls were 33,978
+less N2_calls.vcf and head N2_calls.vcf
+bcftools view -v snps N2_calls.vcf > N2_snp.vcf (to selectively extract single nucleotide polymorphisms)
+head N2_snp.vcf and less N2_snp.vcf
+bgzip N2_calls.vcf | bcftools index N2_calls.vcf.gz (to zip and index the N2 variant calls)
+cat FWYH01.1.fsa_nt | bcftools consensus N2_calls.vcf.gz > N2_DSMZ.fasta (to create a consensus fasta sequence file with the reference N2, the alignments and the SNPs) 
+head N2_DSMZ.fasta and less N2_DSMZ.fasta (to view consensus fasta assembly generated)
+grep -c "contig" N2_DSMZ.fasta (to count the number of contings in the new consensus reference sequence)
+There are 10 contigs in this new consensus fasta. 
