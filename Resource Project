@@ -29,3 +29,6 @@ cat FWYH01.1.fsa_nt | bcftools consensus N2_calls.vcf.gz > N2_DSMZ.fasta (to cre
 head N2_DSMZ.fasta and less N2_DSMZ.fasta (to view consensus fasta assembly generated)
 grep -c "contig" N2_DSMZ.fasta (to count the number of contings in the new consensus reference sequence)
 There are 10 contigs in this new consensus fasta. 
+conda activate de_novo
+spades.py -k 21,51,71,91,111,127 --careful --pe1-1 N2.R1.cutadapt.fastq --pe1-2 N2.R2.cutadapt.fastq -o N2_spades_output
+Use winscp to assess the report files (pdf and .html) and assess quality of the assembly
