@@ -42,3 +42,5 @@ grep "COG" N2.tsv| cut -f6| sort| uniq -c| sort -n| sort>N2_cogs.txt (to separat
 grep -c "=COG" N2.gff, grep -c "eC" N2.gff (there are 3378 genes with enzyme commission numbers while 4197 genes have clusters of orthologous gene assessions)
 (COG1960 was the most frequent occurring 19 times in the annotation output)
 cut -f5 N2.tsv| sort| uniq -c| sort -n| sort>N2_ec.txt (to separate out a file with EC numbers and as well the most frequently occurring EC number)
+The N2.faa file is greater than 10,000 Amino acid sequence queries so I splitted the whole file into 2
+head -n 18001 N2.faa>N2_a.faa then Tail -n +18002 N2.faa> N2_b.faa. 
