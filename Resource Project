@@ -34,3 +34,11 @@ spades.py -k 21,51,71,91,111,127 --careful --pe1-1 N2.R1.cutadapt.fastq --pe1-2 
 quast contigs.fasta -o Quast_contigs (to evaluate the quality of assembly via Quast)
 cd Quast_contigs
 Use winscp to assess the report files (pdf and .html) and assess quality of the assembly
+conda activate annotation
+awk '/^>/{print ">N2_" ++i; next}{print}' < contigs.fasta > N2_contigs_names.fasta 
+prokka --outdir N2 --prefix N2 N2_contigs_names.fasta (annotation of genes)
+(From the N2.txt file, there are 9663 contigs, 33 rRNA, 5 repeat regions, 203 tRNA, 4 tmRNA)
+grep "COG" N2.tsv| cut -f6| sort| uniq -c| sort -n| sort>N2_cogs.txt (to separate, count and know the number of COG defined genes as well as most frequent COG)
+grep -c "=COG" N2.gff, grep -c "eC" N2.gff (there are 3378 genes with enzyme commission numbers while 4197 genes have clusters of orthologous gene assessions)
+(COG1960 was the most frequent occurring 19 times in the annotation output)
+cut -f5 N2.tsv| sort| uniq -c| sort -n| sort>N2_ec.txt (to separate out a file with EC numbers and as well the most frequently occurring EC number)
