@@ -36,7 +36,7 @@ cd Quast_contigs
 Use winscp to assess the report files (pdf and .html) and assess quality of the assembly
 conda activate annotation
 awk '/^>/{print ">N2_" ++i; next}{print}' < contigs.fasta > N2_contigs_names.fasta 
-prokka --outdir N2 --prefix N2 N2_contigs_names.fasta (annotation of genes)
+prokka --outdir N2 --prefix N2 N2_contigs_names.fasta (annotation of gene reads)
 (From the N2.txt file, there are 9663 contigs, 33 rRNA, 5 repeat regions, 203 tRNA, 4 tmRNA)
 grep "COG" N2.tsv| cut -f6| sort| uniq -c| sort -n| sort>N2_cogs.txt (to separate, count and know the number of COG defined genes as well as most frequent COG)
 grep -c "=COG" N2.gff, grep -c "eC" N2.gff (there are 3378 genes with enzyme commission numbers while 4197 genes have clusters of orthologous gene assessions)
