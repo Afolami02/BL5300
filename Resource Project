@@ -58,7 +58,6 @@ prokka --outdir R2 --prefix R2 Ref_annotation.fasta (annotation of reference gen
 (From the R2.txt file, there are 10 contigs, 9 rRNA, 54 tRNAs, 1 mRNA and no repeat regions)
 grep -c "=COG" R2.gff, grep -c "eC" R2.gff (There are 1290 genes with clusters of orthologous genes COGS while only 1084 proteins have enzyme commission numbers)
 grep "COG" R2.tsv| cut -f6| sort| uniq -c| sort -n| sort>R2_cogs.txt
+(COG1595 was the most frequent occurring 15 times in the annotation output) 
 cut -f5 R2.tsv| sort| uniq -c| sort -n| sort>R2_ec.txt (The most frequently occuring proteins had EC IDs of eC_2.3.1._ and eC_3.6.3._ which appeared 21 times each in the annotation output)
 The R2.faa only has 3430 amino acids which was ran into the Kegg Blast website
-
-(COG1595 was the most frequent occurring 15 times in the annotation output) 
