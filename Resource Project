@@ -42,5 +42,23 @@ grep "COG" N2.tsv| cut -f6| sort| uniq -c| sort -n| sort>N2_cogs.txt (to separat
 grep -c "=COG" N2.gff, grep -c "eC" N2.gff (there are 3378 genes with enzyme commission numbers while 4197 genes have clusters of orthologous gene assessions)
 (COG1960 was the most frequent occurring 19 times in the annotation output)
 cut -f5 N2.tsv| sort| uniq -c| sort -n| sort>N2_ec.txt (to separate out a file with EC numbers and as well the most frequently occurring EC number)
+(The most frequently occuring protein had an EC ID of eC_1._._._ which appeared 68 times in the annotation output)
 The N2.faa file is greater than 10,000 Amino acid sequence queries so I splitted the whole file into 2
 head -n 18001 N2.faa>N2_a.faa then Tail -n +18002 N2.faa> N2_b.faa. 
+Run the N2_a.faa and N2_b.faa on Kegg Blast website
+
+
+
+
+Codes for simulatenous analysis done on the N2 reference (FWYH01.1.fsa_nt) file is below 
+head -n 49077 FWYH01.1.fsa_nt>N2-ref.fasta (to change file format of reference for easy manipulation)
+conda activate annotation 
+awk '/^>/{print ">R2_" ++i; next}{print}' < N2-ref.fasta > Ref_annotation.fasta 
+prokka --outdir R2 --prefix R2 Ref_annotation.fasta (annotation of reference gene)
+(From the R2.txt file, there are 10 contigs, 9 rRNA, 54 tRNAs, 1 mRNA and no repeat regions)
+grep -c "=COG" R2.gff, grep -c "eC" R2.gff (There are 1290 genes with clusters of orthologous genes COGS while only 1084 proteins have enzyme commission numbers)
+grep "COG" R2.tsv| cut -f6| sort| uniq -c| sort -n| sort>R2_cogs.txt
+cut -f5 R2.tsv| sort| uniq -c| sort -n| sort>R2_ec.txt (The most frequently occuring proteins had EC IDs of eC_2.3.1._ and eC_3.6.3._ which appeared 21 times each in the annotation output)
+The R2.faa only has 3430 amino acids which was ran into the Kegg Blast website
+
+(COG1595 was the most frequent occurring 15 times in the annotation output) 
