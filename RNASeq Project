@@ -1,0 +1,12 @@
+gunzip  SSPG007L_S29_L004_R1_001.fastq.gz, SSPG008A_S30_L008_R1_001.fastq.gz, SSPG011N_S78_L006_R1_001.fastq.gz, SSPG011R_S81_L006_R1_001.fastq.gz.
+gunzip SSPG007S_S36_L004_R1_001.fastq.gz, SSPG008B_S31_L008_R1_001.fastq.gz, SSPG011O_S79_L006_R1_001.fastq.gz, SSPG011S_S82_L006_R1_001.fastq.gz
+gunzip  SSPG007V_S39_L004_R1_001.fastq.gz, SSPG008C_S32_L008_R1_001.fastq.gz,  SSPG011Q_S80_L006_R1_001.fastq.gz,  SSPG011T_S83_L006_R1_001.fastq.gz (Unzip all raw reads)
+fastqc SSPG007L_S29_L004_R1_001.fastq, SSPG008A_S30_L008_R1_001.fastq, SSPG011N_S78_L006_R1_001.fastq, SSPG011R_S81_L006_R1_001.fastq. (To quality assess raw reads)
+fastqc SSPG007S_S36_L004_R1_001.fastq, SSPG008B_S31_L008_R1_001.fastq, SSPG011O_S79_L006_R1_001.fastq, SSPG011S_S82_L006_R1_001.fastq (To quality assess raw reads)
+fastqc SSPG007V_S39_L004_R1_001.fastq, SSPG008C_S32_L008_R1_001.fastq, SSPG011Q_S80_L006_R1_001.fastq,  SSPG011T_S83_L006_R1_001.fastq (To quality assess raw reads)
+wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/002/985/GCF_000002985.6_WBcel235/GCF_000002985.6_WBcel235_rna.fna.gz (to download C. elegans reference transcript)
+GCF_000002985.6_WBcel235_rna.fna.gz is the Reference transcript
+gunzip GCF_000002985.6_WBcel235_rna.fna.gz (to unzip the transcript, output file is GCF_000002985.6_WBcel235_rna.fna)
+conda activate RNASeq
+mkdir star
+STAR --runMode genomeGenerate --genomeDir star --genomeFastaFiles GCF_000002985.6_WBcel235_rna.fna --sjdbGTFfile Homo_sapiens.GRCh38.86.gt
