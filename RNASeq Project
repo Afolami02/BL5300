@@ -37,3 +37,19 @@ grep -c "F" Nlemb2.vcf, Linlemb3.vcf,  NL3.vcf,  LinL3.vcf
 
 (The total variant calls were )
 
+mkdir rsem
+rsem-prepare-reference --gtf Ref_transcript_rna.fna rsem/RCE
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Nlemb1.Aligned.toTranscriptome.out.bam rsem/RCE out >& Nlemb1_rsem.log
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Nlemb3.Aligned.toTranscriptome.out.bam rsem/RCE out >& Nlemb3_rsem.log 
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 NL1.Aligned.toTranscriptome.out.bam rsem/RCE out >& NL1_rsem.log
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 LinL1.Aligned.toTranscriptome.out.bam rsem/RCE out >& LinL1_rsem.log
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Linlemb1.Aligned.toTranscriptome.out.bam rsem/RCE out >& Linlemb1_rsem.log
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Linlemb2.Aligned.toTranscriptome.out.bam rsem/RCE out >& Linlemb2_rsem.log
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 NL2.Aligned.toTranscriptome.out.bam rsem/RCE out >& NL2_rsem.log
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 LinL2.Aligned.toTranscriptome.out.bam rsem/RCE out >& LinL2_rsem.log
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Nlemb2.Aligned.toTranscriptome.out.bam rsem/RCE out >& Nlemb2_rsem.log
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Linlemb3.Aligned.toTranscriptome.out.bam rsem/RCE out >& Linlemb3_rsem.log
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 NL3.Aligned.toTranscriptome.out.bam rsem/RCE out >& NL3_rsem.log
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 LinL3.Aligned.toTranscriptome.out.bam rsem/RCE out >& LinL3_rsem.log
+
+
