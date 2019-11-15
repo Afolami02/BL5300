@@ -1,22 +1,39 @@
-gunzip  SSPG007L_S29_L004_R1_001.fastq.gz, SSPG008A_S30_L008_R1_001.fastq.gz, SSPG011N_S78_L006_R1_001.fastq.gz, SSPG011R_S81_L006_R1_001.fastq.gz.
-gunzip SSPG007S_S36_L004_R1_001.fastq.gz, SSPG008B_S31_L008_R1_001.fastq.gz, SSPG011O_S79_L006_R1_001.fastq.gz, SSPG011S_S82_L006_R1_001.fastq.gz
-gunzip  SSPG007V_S39_L004_R1_001.fastq.gz, SSPG008C_S32_L008_R1_001.fastq.gz,  SSPG011Q_S80_L006_R1_001.fastq.gz,  SSPG011T_S83_L006_R1_001.fastq.gz (Unzip all raw reads)
-fastqc SSPG007L_S29_L004_R1_001.fastq, SSPG008A_S30_L008_R1_001.fastq, SSPG011N_S78_L006_R1_001.fastq, SSPG011R_S81_L006_R1_001.fastq. (To quality assess raw reads)
-fastqc SSPG007S_S36_L004_R1_001.fastq, SSPG008B_S31_L008_R1_001.fastq, SSPG011O_S79_L006_R1_001.fastq, SSPG011S_S82_L006_R1_001.fastq (To quality assess raw reads)
-fastqc SSPG007V_S39_L004_R1_001.fastq, SSPG008C_S32_L008_R1_001.fastq, SSPG011Q_S80_L006_R1_001.fastq,  SSPG011T_S83_L006_R1_001.fastq (To quality assess raw reads)
+gunzip  Nlemb1.fastq.gz, Nlemb3.fastq.gz, NL1.fastq.gz, LinL1.fastq.gz. (Unzip all raw reads)
+gunzip Linlemb1.fastq.gz, Linlemb2.fastq.gz, NL2.fastq.gz, LinL2.fastq.gz (Unzip all raw reads)
+gunzip  Nlemb2.fastq.gz, Linlemb3.fastq.gz,  NL3.fastq.gz,  LinL3.fastq.gz (Unzip all raw reads)
+fastqc Nlemb1.fastq, Nlemb3.fastq, NL1.fastq, LinL1.fastq. (To quality assess raw reads)
+fastqc Linlemb1.fastq, Linlemb2.fastq, NL2.fastq, LinL2.fastq. (To quality assess raw reads)
+fastqc Nlemb2.fastq, Linlemb3.fastq,  NL3.fastq,  LinL3.fastq. (To quality assess raw reads)
 wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/002/985/GCF_000002985.6_WBcel235/GCF_000002985.6_WBcel235_rna.fna.gz (to download C. elegans reference transcript)
 GCF_000002985.6_WBcel235_rna.fna.gz is the Reference transcript
-gunzip GCF_000002985.6_WBcel235_rna.fna.gz (to unzip the transcript, output file is GCF_000002985.6_WBcel235_rna.fna)
-
+gunzip GCF_000002985.6_WBcel235_rna.fna.gz> Ref_transcript_rna.fna (to unzip the transcript, output file is GCF_000002985.6_WBcel235_rna.fna)
 conda activate RNASeq
-bowtie2-build GCF_000002985.6_WBcel235_rna.fna Ref.elegans (to index the reference transcript in GCF_000002985.6_WBcel235_rna.fna)
-bowtie2 -x Ref.elegans -1 N2.R1.fastq -2 N2.R2.fastq -S N2.sam  (to map the index reference into the raw sequencing data reads)
-less or head N2.sam (view alignments in the N2 reference sequence and what N2 read alignments were mapped into reference)
-grep -c "@SQ" N2.sam (count the reference sequence in indexed N2 reference) and grep -c "M0" N2.sam (count the number of mapped reads in N2 forward and reverse (R1 and R2) to the reference sequence)
-The number of reference sequence indexed is 10 while the number of mapped reads in N2.sam is 2644333
-samtools view -b N2.sam | samtools sort - > N2.bam (To convert N2.sam to .bam file using samtools)
-samtools index N2.bam (Index the N2.bam file) 
-bcftools mpileup -f FWYH01.1.fsa_nt N2.bam | bcftools call -mv -Ob --ploidy 1 -o raw.calls_N2.bcf
-bcftools filter --exclud 'QUAL < 30' raw.calls_N2.bcf > N2_calls.vcf (to filter the variant calls)
-grep -c "F" N2_calls.vcf (to count the number of variant calls in the mapped read). The total variant calls were 33,978
-less N2_calls.vcf and head N2_calls.vcf
+bowtie2-build Ref_transcript_rna.fna Ref.elegans (Ref_transcript_rna.fna)
+bowtie2 -x Ref.elegans Nlemb1.fastq, Nlemb3.fastq, NL1.fastq, LinL1.fastq. -S Nlemb1.sam, Nlemb3.sam, NL1.sam, LinL1.sam. (to map the indexed transcript into raw RNA reads)
+bowtie2 -x Ref.elegans Linlemb1.fastq, Linlemb2.fastq, NL2.fastq, LinL2.fastq. -S Linlemb1.sam, Linlemb2.sam, NL2.sam, LinL2.sam. (to map the indexed transcript into raw RNA reads)
+bowtie2 -x Ref.elegans Nlemb2.fastq, Linlemb3.fastq,  NL3.fastq,  LinL3.fastq. -S Nlemb2.sam, Linlemb3.sam,  NL3.sam,  LinL3.sam.
+
+
+(grep -c "@SQ" N2.sam (count the reference sequence in indexed N2 reference) and grep -c "M0" N2.sam (count the number of mapped reads in N2 forward and reverse (R1 and R2) to the reference sequence)
+(The number of reference sequence indexed is 10 while the number of mapped reads in N2.sam is 2644333)
+
+
+samtools view -b Nlemb1.sam, Nlemb3.sam, NL1.sam, LinL1.sam | samtools sort - > Nlemb1.bam, Nlemb3.bam, NL1.bam, LinL1.bam (To convert sam to .bam file using samtools)
+samtools view -b Linlemb1.sam, Linlemb2.sam, NL2.sam, LinL2.sam | samtools sort - > Linlemb1.bam, Linlemb2.bam, NL2.bam, LinL2.bam
+samtools view -b Nlemb2.sam, Linlemb3.sam,  NL3.sam,  LinL3.sam. | samtools sort - > Nlemb2.bam, Linlemb3.bam,  NL3.bam,  LinL3.bam.
+samtools index Nlemb1.bam, Nlemb3.bam, NL1.bam, LinL1.bam (Index the .bam file)
+samtools index Linlemb1.bam, Linlemb2.bam, NL2.bam, LinL2.bam
+samtools index Nlemb2.bam, Linlemb3.bam,  NL3.bam,  LinL3.bam.
+bcftools mpileup -f Ref_transcript_rna.fna Nlemb1.bam, Nlemb3.bam, NL1.bam, LinL1.bam | bcftools call -mv -Ob --ploidy 1 -o Nlemb1.rawcalls.bcf, Nlemb3.rawcalls.bcf, NL1.rawcalls.bcf, LinL1.rawcalls.bcf
+bcftools mpileup -f Ref_transcript_rna.fna Linlemb1.bam, Linlemb2.bam, NL2.bam, LinL2.bam | bcftools call -mv -Ob --ploidy 1 -o Linlemb1.rawcalls.bcf, Linlemb2.rawcalls.bcf, NL2.rawcalls.bcf, LinL2.rawcalls.bcf
+bcftools mpileup -f Ref_transcript_rna.fna Nlemb1.bam, Nlemb3.bam, NL1.bam, LinL1.bam | bcftools call -mv -Ob --ploidy 1 -o Nlemb2.rawcalls.bcf, Linlemb3.rawcalls.bcf,  NL3.rawcalls.bcf,  LinL3.rawcalls.bcf
+bcftools filter --exclud 'QUAL < 30' Nlemb1.rawcalls.bcf, Nlemb3.rawcalls.bcf, NL1.rawcalls.bcf, LinL1.rawcalls.bcf > Nlemb1.vcf, Nlemb3.vcf, NL1.vcf, LinL1.vcf (to filter the variant calls)
+bcftools filter --exclud 'QUAL < 30' Linlemb1.rawcalls.bcf, Linlemb2.rawcalls.bcf, NL2.rawcalls.bcf, LinL2.rawcalls.bcf > Linlemb1.vcf, Linlemb2.vcf, NL2.vcf, LinL2.vcf
+bcftools filter --exclud 'QUAL < 30' Nlemb2.rawcalls.bcf, Linlemb3.rawcalls.bcf,  NL3.rawcalls.bcf,  LinL3.rawcalls.bcf > Nlemb2.vcf, Linlemb3.vcf,  NL3.vcf,  LinL3.vcf
+grep -c "F" Nlemb1.vcf, Nlemb3.vcf, NL1.vcf, LinL1.vcf (to count the number of variant calls in the mapped read). 
+grep -c "F" Linlemb1.vcf, Linlemb2.vcf, NL2.vcf, LinL2.vcf
+grep -c "F" Nlemb2.vcf, Linlemb3.vcf,  NL3.vcf,  LinL3.vcf
+
+
+(The total variant calls were )
+
