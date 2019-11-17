@@ -12,12 +12,7 @@ bowtie2-build Ref_transcript_rna.fna Ref.elegans (Ref_transcript_rna.fna)
 bowtie2 -x Ref.elegans Nlemb1.fastq, Nlemb3.fastq, NL1.fastq, LinL1.fastq. -S Nlemb1.sam, Nlemb3.sam, NL1.sam, LinL1.sam. (to map the indexed transcript into raw RNA reads)
 bowtie2 -x Ref.elegans Linlemb1.fastq, Linlemb2.fastq, NL2.fastq, LinL2.fastq. -S Linlemb1.sam, Linlemb2.sam, NL2.sam, LinL2.sam. (to map the indexed transcript into raw RNA reads)
 bowtie2 -x Ref.elegans Nlemb2.fastq, Linlemb3.fastq,  NL3.fastq,  LinL3.fastq. -S Nlemb2.sam, Linlemb3.sam,  NL3.sam,  LinL3.sam.
-
-
-(grep -c "@SQ" N2.sam (count the reference sequence in indexed N2 reference) and grep -c "M0" N2.sam (count the number of mapped reads in N2 forward and reverse (R1 and R2) to the reference sequence)
-(The number of reference sequence indexed is 10 while the number of mapped reads in N2.sam is 2644333)
-
-
+(grep -c "K0" *.sam (count the number of mapped reads in all .sam files to the reference transcriptome)
 samtools view -b Nlemb1.sam, Nlemb3.sam, NL1.sam, LinL1.sam | samtools sort - > Nlemb1.bam, Nlemb3.bam, NL1.bam, LinL1.bam (To convert sam to .bam file using samtools)
 samtools view -b Linlemb1.sam, Linlemb2.sam, NL2.sam, LinL2.sam | samtools sort - > Linlemb1.bam, Linlemb2.bam, NL2.bam, LinL2.bam
 samtools view -b Nlemb2.sam, Linlemb3.sam,  NL3.sam,  LinL3.sam. | samtools sort - > Nlemb2.bam, Linlemb3.bam,  NL3.bam,  LinL3.bam.
@@ -30,15 +25,11 @@ bcftools mpileup -f Ref_transcript_rna.fna Nlemb1.bam, Nlemb3.bam, NL1.bam, LinL
 bcftools filter --exclud 'QUAL < 30' Nlemb1.rawcalls.bcf, Nlemb3.rawcalls.bcf, NL1.rawcalls.bcf, LinL1.rawcalls.bcf > Nlemb1.vcf, Nlemb3.vcf, NL1.vcf, LinL1.vcf (to filter the variant calls)
 bcftools filter --exclud 'QUAL < 30' Linlemb1.rawcalls.bcf, Linlemb2.rawcalls.bcf, NL2.rawcalls.bcf, LinL2.rawcalls.bcf > Linlemb1.vcf, Linlemb2.vcf, NL2.vcf, LinL2.vcf
 bcftools filter --exclud 'QUAL < 30' Nlemb2.rawcalls.bcf, Linlemb3.rawcalls.bcf,  NL3.rawcalls.bcf,  LinL3.rawcalls.bcf > Nlemb2.vcf, Linlemb3.vcf,  NL3.vcf,  LinL3.vcf
-grep -c "F" Nlemb1.vcf, Nlemb3.vcf, NL1.vcf, LinL1.vcf (to count the number of variant calls in the mapped read). 
-grep -c "F" Linlemb1.vcf, Linlemb2.vcf, NL2.vcf, LinL2.vcf
-grep -c "F" Nlemb2.vcf, Linlemb3.vcf,  NL3.vcf,  LinL3.vcf
-
-
-(The total variant calls were )
-
+grep -c "NR" Nlemb1.vcf, Nlemb3.vcf, NL1.vcf, LinL1.vcf (to count the number of variant calls in the mapped read). 
+grep -c "NR" Linlemb1.vcf, Linlemb2.vcf, NL2.vcf, LinL2.vcf
+grep -c "NR" Nlemb2.vcf, Linlemb3.vcf,  NL3.vcf,  LinL3.vcf
 mkdir rsem
-rsem-prepare-reference --gtf Ref_transcript_rna.fna rsem/RCE
+rsem-prepare-reference -- Ref_transcript_rna.fna rsem/RCE
 rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Nlemb1.Aligned.toTranscriptome.out.bam rsem/RCE out >& Nlemb1_rsem.log
 rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Nlemb3.Aligned.toTranscriptome.out.bam rsem/RCE out >& Nlemb3_rsem.log 
 rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 NL1.Aligned.toTranscriptome.out.bam rsem/RCE out >& NL1_rsem.log
