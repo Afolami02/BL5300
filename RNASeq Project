@@ -31,30 +31,27 @@ grep -c "NR" Linlemb1.vcf, Linlemb2.vcf, NL2.vcf, LinL2.vcf
 grep -c "NR" Nlemb2.vcf, Linlemb3.vcf,  NL3.vcf,  LinL3.vcf
 
 
-DIFFERENTIAL EXPRESSION
-wget ftp://ftp.wormbase.org/pub/wormbase/releases/WS220/species/c_elegans/c_elegans.WS220.genomic.fa.gz (to download C.elegans reference genome)
-c_elegans.WS220.genomic.fa.gz is the reference genonme for C.elegans
-gunzip c_elegans.WS220.genomic.fa.gz
-wget ftp://ftp.wormbase.org/pub/wormbase/releases/WS220/species/c_elegans/c_elegans.WS220.annotations.gff3.gz
-gunzip c_elegans.WS220.annotations.gff3.gz
-conda activate RNASeq
-mkdir STAR
-STAR --runMode genomeGenerate --genomeDir STAR --genomeFastaFiles c_elegans.WS220.genomic.fa --sjdbGTFfile c_elegans.WS220.annotations.gff3 (To index the genomic index with Star)
-STAR --genomeDir STAR --readFilesCommand zcat --readFilesIn Nlemb1.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --twopassMode Basic --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM --outFileNamePrefix "Nlemb1"
-STAR --genomeDir STAR --readFilesCommand zcat --readFilesIn Nlemb3.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --twopassMode Basic --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM --outFileNamePrefix "Nlemb3"
-STAR --genomeDir STAR --readFilesCommand zcat --readFilesIn NL1.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --twopassMode Basic --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM --outFileNamePrefix "NL1"
-STAR --genomeDir STAR --readFilesCommand zcat --readFilesIn LinL1.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --twopassMode Basic --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM --outFileNamePrefix "LinL1"
-STAR --genomeDir STAR --readFilesCommand zcat --readFilesIn Linlemb1.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --twopassMode Basic --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM --outFileNamePrefix "Linlemb1"
-STAR --genomeDir STAR --readFilesCommand zcat --readFilesIn Linlemb2.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --twopassMode Basic --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM --outFileNamePrefix "Linlemb2"
-STAR --genomeDir STAR --readFilesCommand zcat --readFilesIn NL2.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --twopassMode Basic --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM --outFileNamePrefix "NL2"
-STAR --genomeDir STAR --readFilesCommand zcat --readFilesIn LinL2.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --twopassMode Basic --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM --outFileNamePrefix "LinL2"
-STAR --genomeDir STAR --readFilesCommand zcat --readFilesIn Nlemb2.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --twopassMode Basic --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM --outFileNamePrefix "Nlemb2"
-STAR --genomeDir STAR --readFilesCommand zcat --readFilesIn Linlemb3.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --twopassMode Basic --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM --outFileNamePrefix "Linlemb3"
-STAR --genomeDir STAR --readFilesCommand zcat --readFilesIn NL3.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --twopassMode Basic --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM --outFileNamePrefix "NL3"
-STAR --genomeDir STAR --readFilesCommand zcat --readFilesIn LinL3.fastq.gz --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --twopassMode Basic --outFilterMultimapNmax 1 --quantMode TranscriptomeSAM --outFileNamePrefix "LinL3"
-mkdir rsem
-rsem-prepare-reference --gff3 c_elegans.WS220.annotations.gff3 c_elegans.WS220.genomic.fa rsem/TRCE 
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Nlemb1Aligned.toTranscriptome.out.bam rsem/TRCE out >& Nlemb1.log
+DIFFERENTIAL EXPRESSION (Using Salmon)
+conda config --add channels conda-forge
+conda config --add channels bioconda
+conda create -n salmon salmon (to get started with Salmon)
+
+conda activate salmon (To activate salmon)
+salmon -h (to read if salmon is active)
+salmon index -t GCF_000002985.6_WBcel235_rna.fna -i Reference_index (To index reference transcriptome with Salmon)
+salmon quant -i Reference_index -l A -r Nlemb1.fastq.gz -o Nlemb1_transcripts_quant (To obtain a counts table using Salmon command "quant")
+salmon quant -i Reference_index -l A -r Nlemb3.fastq.gz -o Nlemb3_transcripts_quant
+salmon quant -i Reference_index -l A -r NL1.fastq.gz -o NL1_transcripts_quant
+salmon quant -i Reference_index -l A -r LinL1.fastq.gz -o LinL1_transcripts_quant
+salmon quant -i Reference_index -l A -r Linlemb1.fastq.gz -o Linlemb1_transcripts_quant
+salmon quant -i Reference_index -l A -r Linlemb2.fastq.gz -o Linlemb2_transcripts_quant
+salmon quant -i Reference_index -l A -r NL2.fastq.gz -o NL2_transcripts_quant
+salmon quant -i Reference_index -l A -r LinL2.fastq.gz -o LinL2_transcripts_quant
+salmon quant -i Reference_index -l A -r Nlemb2.fastq.gz -o Nlemb2_transcripts_quant
+salmon quant -i Reference_index -l A -r Linlemb3.fastq.gz -o Linlemb3_transcripts_quant
+salmon quant -i Reference_index -l A -r NL3.fastq.gz -o NL3_transcripts_quant
+salmon quant -i Reference_index -l A -r LinL3.fastq.gz -o LinL3_transcripts_quant
+
 
 
 
