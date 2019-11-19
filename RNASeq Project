@@ -35,7 +35,6 @@ DIFFERENTIAL EXPRESSION (Using Salmon)
 conda config --add channels conda-forge
 conda config --add channels bioconda
 conda create -n salmon salmon (to get started with Salmon)
-
 conda activate salmon (To activate salmon)
 salmon -h (to read if salmon is active)
 salmon index -t GCF_000002985.6_WBcel235_rna.fna -i Reference_index (To index reference transcriptome with Salmon)
@@ -51,6 +50,9 @@ salmon quant -i Reference_index -l A -r Nlemb2.fastq.gz -o Nlemb2_transcripts_qu
 salmon quant -i Reference_index -l A -r Linlemb3.fastq.gz -o Linlemb3_transcripts_quant
 salmon quant -i Reference_index -l A -r NL3.fastq.gz -o NL3_transcripts_quant
 salmon quant -i Reference_index -l A -r LinL3.fastq.gz -o LinL3_transcripts_quant
+
+DESEQ analysing on R
+
 
 
 
