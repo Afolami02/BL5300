@@ -1,3 +1,4 @@
+PRELIMINARY DATA ANALYSIS
 gunzip  Nlemb1.fastq.gz, Nlemb3.fastq.gz, NL1.fastq.gz, LinL1.fastq.gz. (Unzip all raw reads)
 gunzip Linlemb1.fastq.gz, Linlemb2.fastq.gz, NL2.fastq.gz, LinL2.fastq.gz (Unzip all raw reads)
 gunzip  Nlemb2.fastq.gz, Linlemb3.fastq.gz,  NL3.fastq.gz,  LinL3.fastq.gz (Unzip all raw reads)
@@ -28,19 +29,32 @@ bcftools filter --exclud 'QUAL < 30' Nlemb2.rawcalls.bcf, Linlemb3.rawcalls.bcf,
 grep -c "NR" Nlemb1.vcf, Nlemb3.vcf, NL1.vcf, LinL1.vcf (to count the number of variant calls in the mapped read). 
 grep -c "NR" Linlemb1.vcf, Linlemb2.vcf, NL2.vcf, LinL2.vcf
 grep -c "NR" Nlemb2.vcf, Linlemb3.vcf,  NL3.vcf,  LinL3.vcf
+
+
+DIFFERENTIAL EXPRESSION
+wget ftp://ftp.wormbase.org/pub/wormbase/releases/WS220/species/c_elegans/c_elegans.WS220.genomic.fa.gz (to download C.elegans reference genome)
+c_elegans.WS220.genomic.fa.gz is the reference genonme for C.elegans
+gunzip c_elegans.WS220.genomic.fa.gz
+wget ftp://ftp.wormbase.org/pub/wormbase/releases/WS220/species/c_elegans/c_elegans.WS220.annotations.gff3.gz
+gunzip c_elegans.WS220.annotations.gff3.gz
+conda activate RNASeq
+mkdir STAR
+STAR --runMode genomeGenerate --genomeDir STAR --genomeFastaFiles c_elegans.WS220.genomic.fa --sjdbGTFfile c_elegans.WS220.annotations.gff3
+
+
 mkdir rsem
-rsem-prepare-reference -- Ref_transcript_rna.fna rsem/RCE
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Nlemb1.Aligned.toTranscriptome.out.bam rsem/RCE out >& Nlemb1_rsem.log
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Nlemb3.Aligned.toTranscriptome.out.bam rsem/RCE out >& Nlemb3_rsem.log 
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 NL1.Aligned.toTranscriptome.out.bam rsem/RCE out >& NL1_rsem.log
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 LinL1.Aligned.toTranscriptome.out.bam rsem/RCE out >& LinL1_rsem.log
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Linlemb1.Aligned.toTranscriptome.out.bam rsem/RCE out >& Linlemb1_rsem.log
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Linlemb2.Aligned.toTranscriptome.out.bam rsem/RCE out >& Linlemb2_rsem.log
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 NL2.Aligned.toTranscriptome.out.bam rsem/RCE out >& NL2_rsem.log
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 LinL2.Aligned.toTranscriptome.out.bam rsem/RCE out >& LinL2_rsem.log
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Nlemb2.Aligned.toTranscriptome.out.bam rsem/RCE out >& Nlemb2_rsem.log
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 Linlemb3.Aligned.toTranscriptome.out.bam rsem/RCE out >& Linlemb3_rsem.log
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 NL3.Aligned.toTranscriptome.out.bam rsem/RCE out >& NL3_rsem.log
-rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 LinL3.Aligned.toTranscriptome.out.bam rsem/RCE out >& LinL3_rsem.log
+rsem-prepare-reference --gff3 c_elegans.WS220.annotations.gff3 c_elegans.WS220.genomic.fa rsem/TRCE 
+rsem-calculate-expression --bam --no-bam-output --paired-end --forward-prob 0 GM12872.1Aligned.toTranscriptome.out.bam rsem/GRCh38 out >& rsem.log
+
+
+
+
+
+
+
+
+
+
+
 
 
