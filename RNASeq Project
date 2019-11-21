@@ -52,9 +52,74 @@ salmon quant -i Reference_index -l A -r NL3.fastq.gz -o NL3_transcripts_quant
 salmon quant -i Reference_index -l A -r LinL3.fastq.gz -o LinL3_transcripts_quant
 
 DESEQ analysing on R
-
-
-
+library(readr)
+library(tidyverse)
+library(DESeq2)
+(To transfer data sets into R)
+read_tsv("Counts/LinL1.sf")
+LinL1<- read_tsv("Counts/LinL1.sf")
+LinL2<- read_tsv("Counts/LinL2.sf")
+LinL3<- read_tsv("Counts/LinL3.sf")
+Linlemb1<- read_tsv("Counts/Linlemb1.sf")
+Linlemb2<- read_tsv("Counts/Linlemb2.sf")
+Linlemb3<- read_tsv("Counts/Linlemb3.sf")
+NL1<- read_tsv("Counts/NL1.sf")
+NL2<- read_tsv("Counts/NL2.sf")
+NL3<- read_tsv("Counts/NL3.sf")
+Nlemb1<- read_tsv("Counts/Nlemb1.sf")
+Nlemb2<- read_tsv("Counts/Nlemb2.sf")
+Nlemb3<- read_tsv("Counts/Nlemb3.sf")
+(To filter data sets)
+O.LinL1<- LinL1%>%
+  select(c("Name", "NumReads"))
+O.LinL2<- LinL2%>%
+  select(c("Name", "NumReads"))
+O.LinL3<- LinL3%>%
+  select(c("Name", "NumReads"))
+O.Linlemb1<- Linlemb1%>%
+  select(c("Name", "NumReads"))
+O.Linlemb2<- Linlemb2%>%
+  select(c("Name", "NumReads"))
+O.Linlemb3<- Linlemb3%>%
+  select(c("Name", "NumReads"))
+O.NL1<- NL1%>%
+  select(c("Name", "NumReads"))
+O.NL2<- NL2%>%
+  select(c("Name", "NumReads"))
+O.NL3<- NL3%>%
+  select(c("Name", "NumReads"))
+O.Nlemb1<- Nlemb1%>%
+  select(c("Name", "NumReads"))
+O.Nlemb2<- Nlemb2%>%
+  select(c("Name", "NumReads"))
+O.Nlemb3<- Nlemb3%>%
+  select(c("Name", "NumReads"))
+(To change column name to each treatment id)
+colnames(O.LinL1)<-c("Gene ID", "LinL1")
+colnames(O.LinL2)<-c("Gene ID", "LinL2")
+colnames(O.LinL3)<-c("Gene ID", "LinL3")
+colnames(O.Linlemb1)<-c("Gene ID", "Linlemb1")
+colnames(O.Linlemb2)<-c("Gene ID", "Linlemb2")
+colnames(O.Linlemb3)<-c("Gene ID", "Linlemb3")
+colnames(O.NL1)<-c("Gene ID", "NL1")
+colnames(O.NL2)<-c("Gene ID", "NL2")
+colnames(O.NL3)<-c("Gene ID", "NL3")
+colnames(O.Nlemb1)<-c("Gene ID", "Nlemb1")
+colnames(O.Nlemb2)<-c("Gene ID", "Nlemb2")
+colnames(O.Nlemb3)<-c("Gene ID", "Nlemb3")
+(To merge data files from each replicates)
+merged.Nemb<- O.Nlemb1%>%
+  full_join(O.Nlemb2)%>%
+  full_join(O.Nlemb3)
+merged.NL<- O.NL1%>%
+  full_join(O.NL2)%>%
+  full_join(O.NL3)
+merged.Linemb<- O.Linlemb1%>%
+  full_join(O.Linlemb2)%>%
+  full_join(O.Linlemb3)
+merged.LinL<- O.LinL1%>%
+  full_join(O.LinL2)%>%
+  full_join(O.LinL3)
 
 
 
