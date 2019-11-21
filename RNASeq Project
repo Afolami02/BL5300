@@ -51,7 +51,7 @@ salmon quant -i Reference_index -l A -r Linlemb3.fastq.gz -o Linlemb3_transcript
 salmon quant -i Reference_index -l A -r NL3.fastq.gz -o NL3_transcripts_quant
 salmon quant -i Reference_index -l A -r LinL3.fastq.gz -o LinL3_transcripts_quant
 
-DESEQ analysing on R
+DIFFERENTIAL GENE EXPRESSION analyses on R
 library(readr)
 library(tidyverse)
 library(DESeq2)
@@ -144,7 +144,18 @@ LinLemb<- M.Linemb%>%
 LinL<- M.LinL%>%
   select(c("Gene ID", "LinL.X"))
 (To organize the data into the different comparison cases that exists)
-
+Case.1<- LinL%>%
+  full_join(NL)
+Case.2<- LinLemb%>%
+  full_join(Nlemb)
+Case.3<- Nlemb%>%
+  full_join(NL)
+Case.4<- LinLemb%>%
+  full_join(LinL)
+  total.case<- NL%>%
+  full_join(LinL)%>%
+  full_join(LinLemb)%>%
+  full_join(Nlemb)
 
 
 
