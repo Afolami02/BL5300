@@ -120,8 +120,11 @@ merged.Linemb<- O.Linlemb1%>%
 merged.LinL<- O.LinL1%>%
   full_join(O.LinL2)%>%
   full_join(O.LinL3)
-
-
+(To put files in data frame format)
+merged.Nemb <- as.data.frame(merged.Nemb)
+merged.NL <- as.data.frame(merged.NL)
+merged.Linemb <- as.data.frame(merged.Linemb)
+merged.LinL <- as.data.frame(merged.LinL)
 
 
 
