@@ -129,27 +129,22 @@ merged.LinL <- as.data.frame(merged.LinL)
 (To further organize the files with mean values of each rows)
 merged.Nemb[c("Nlemb.X")] <- NA
 M.Nemb<-mutate(merged.Nemb, Nlemb.X=(Nlemb1+Nlemb2+Nlemb3)/3)
-                    
 merged.Linemb[c("Linlemb.X")] <- NA
 M.Linemb<-mutate(merged.Linemb, Linlemb.X=(Linlemb1+Linlemb2+Linlemb3)/3)
-
 merged.NL[c("NL")] <- NA
 M.NL<-mutate(merged.NL, NL.X=(NL1+NL2+NL3)/3)
-
 merged.LinL[c("LinL.X")] <- NA
 M.LinL<-mutate(merged.LinL, LinL.X=(LinL1+LinL2+LinL3)/3)
-
 Nlemb<- M.Nemb%>%
   select(c("Gene ID", "Nlemb.X"))
-
 NL<- M.NL%>%
   select(c("Gene ID", "NL.X"))
-
 LinLemb<- M.Linemb%>%
   select(c("Gene ID", "Linlemb.X"))
-
 LinL<- M.LinL%>%
   select(c("Gene ID", "LinL.X"))
+(To organize the data into the different comparison cases that exists)
+
 
 
 
