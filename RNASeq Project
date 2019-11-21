@@ -156,7 +156,10 @@ Case.4<- LinLemb%>%
   full_join(LinL)%>%
   full_join(LinLemb)%>%
   full_join(Nlemb)
-
+(To input the metadata file)
+read_csv("Counts/metadata.csv")
+choice_metadata<- read_csv("Counts/metadata.csv")
+choice_metadata<- as.data.frame (choice_metadata)
 
 
 
