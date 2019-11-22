@@ -209,7 +209,19 @@ o.res2 <- results(out.case2, tidy=TRUE)
 o.res3 <- results(out.case3, tidy=TRUE)
 o.res4 <- results(out.case4, tidy=TRUE)
 (To manipulate my table results and filter out what is needed)
-
+totalres <- tbl_df(totalres)
+o.res1 <- tbl_df(o.res1)
+o.res2 <- tbl_df(o.res2)
+o.res3 <- tbl_df(o.res3)
+o.res4 <- tbl_df(o.res4)
+tres <- arrange(totalres, padj)
+resA <- arrange(o.res1, padj)
+resB <- arrange(o.res2, padj)
+resC <- arrange(o.res3, padj)
+resD <- arrange(o.res4, padj)
+(To sort out data files such that significance and fold change functions are included)
+tres.filtered <- filter(tres, padj<=0.05 & log2FoldChange>=1.5)
+tres.mutated <-mutate(tres.filtered,significance=ifelse(padj<0.05,"Significant","Non-significant"))
 
 
 
