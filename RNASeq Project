@@ -135,36 +135,81 @@ merged.NL[c("NL")] <- NA
 M.NL<-mutate(merged.NL, NL.X=(NL1+NL2+NL3)/3)
 merged.LinL[c("LinL.X")] <- NA
 M.LinL<-mutate(merged.LinL, LinL.X=(LinL1+LinL2+LinL3)/3)
-Nlemb<- M.Nemb%>%
-  select(c("Gene ID", "Nlemb.X"))
-NL<- M.NL%>%
-  select(c("Gene ID", "NL.X"))
-LinLemb<- M.Linemb%>%
-  select(c("Gene ID", "Linlemb.X"))
-LinL<- M.LinL%>%
-  select(c("Gene ID", "LinL.X"))
-(To organize the data into the different comparison cases that exists)
-Case.1<- LinL%>%
-  full_join(NL)
-Case.2<- LinLemb%>%
-  full_join(Nlemb)
-Case.3<- Nlemb%>%
-  full_join(NL)
-Case.4<- LinLemb%>%
-  full_join(LinL)
-  total.case<- NL%>%
-  full_join(LinL)%>%
-  full_join(LinLemb)%>%
-  full_join(Nlemb)
-(To input the metadata file)
+(To organize data into the different cases that exist; cases represent my hypothesis testing models so I just bin the organized data into categories)
+Case.1<- merged.LinL%>%
+  full_join(merged.NL)
+Case.2<- merged.Linemb%>%
+  full_join(merged.Nemb)
+Case.3<- merged.Nemb%>%
+  full_join(merged.NL)
+Case.4<- merged.Linemb%>%
+  full_join(merged.LinL)
+total.case<- merged.NL%>%
+  full_join(merged.LinL)%>%
+  full_join(merged.Linemb)%>%
+  full_join(merged.Nemb)
+(To delete unwanted colunms in each case files)
+Case.1 <-select (Case.1,-c(LinL.X,NL))
+Case.2 <-select (Case.2,-c(Linlemb.X,Nlemb.X))
+Case.3 <-select (Case.3,-c(Nlemb.X,NL))
+Case.4 <-select (Case.4,-c(Linlemb.X,LinL.X))
+total.case <-select (total.case,-c(Linlemb.X,LinL.X,Nlemb.X,NL))
+(My data values in each case files were in 2.decimal places so I need to round them all off to whole numbers, to do this I used the pipelines below)
+Case.1 <-Case.1 %>% mutate_at(vars(LinL1, LinL2, LinL3, NL1, NL2, NL3), funs(round(., 0)))
+Case.2 <-Case.2 %>% mutate_at(vars(Linlemb1,Linlemb2, Linlemb3, Nlemb1, Nlemb2, Nlemb3), funs(round(., 0)))
+Case.3 <-Case.3 %>% mutate_at(vars(Nlemb1, Nlemb2, Nlemb3, NL1, NL2, NL3), funs(round(., 0)))
+Case.4 <-Case.4 %>% mutate_at(vars(LinL1, LinL2, LinL3, Linlemb1, Linlemb2, Linlemb3), funs(round(., 0)))
+total.case <-total.case %>% mutate_at(vars(LinL1, LinL2, LinL3, Linlemb1, Linlemb2, Linlemb3, Nlemb1, Nlemb2, Nlemb3, NL1, NL2, NL3), funs(round(., 0)))
+(To input the metadata files, case files as well as total case have a metadata file each)
 read_csv("Counts/metadata.csv")
 choice_metadata<- read_csv("Counts/metadata.csv")
 choice_metadata<- as.data.frame (choice_metadata)
-(To round off values in each case as integers)
-Case.1 <-Case.1 %>% mutate_at(vars(LinL.X, NL.X), funs(round(., 0)))
-Case.2 <-Case.2 %>% mutate_at(vars(Linlemb.X, Nlemb.X), funs(round(., 0)))
-Case.3 <-Case.3 %>% mutate_at(vars(Nlemb.X, NL.X), funs(round(., 0)))
-Case.4 <-Case.4 %>% mutate_at(vars(LinL.X, Linlemb.X), funs(round(., 0)))
+read_csv("Counts/metadata.csv")
+choice_metadata<- read_csv("Counts/choicemetadata.csv")
+choice_metadata<- as.data.frame (choice_metadata)
+metadata1<- read_csv("Counts/metadata1.csv")
+metadata1<- as.data.frame (metadata1)
+metadata2<- read_csv("Counts/metadata2.csv")
+metadata2<- as.data.frame (metadata2
+metadata3<- read_csv("Counts/metadata3.csv")
+metadata3<- as.data.frame (metadata3)
+metadata4<- read_csv("Counts/metadata4.csv")
+metadata4<- as.data.frame (metadata4)
+(To create a DESeq object for the case files)
+total.case_dds <- DESeqDataSetFromMatrix(countData= total.case, 
+                                    colData=choice_metadata, 
+                                    design=~dex, 
+                                    tidy=TRUE)
+out1 <- DESeqDataSetFromMatrix(countData= Case.1, 
+                                         colData=metadata1, 
+                                         design=~dex, 
+                                         tidy=TRUE)
+out2 <- DESeqDataSetFromMatrix(countData= Case.2, 
+                                     colData=metadata2, 
+                                     design=~dex, 
+                                     tidy=TRUE)
+out3 <- DESeqDataSetFromMatrix(countData= Case.3, 
+                                     colData=metadata3, 
+                                     design=~dex, 
+                                     tidy=TRUE)
+out4 <- DESeqDataSetFromMatrix(countData= Case.4, 
+                                     colData=metadata4, 
+                                     design=~dex, 
+                                     tidy=TRUE)
+(To run DESeq2 on the DESeq objects)
+tcase <- DESeq(total.case_dds)
+out.case1 <- DESeq(out1)
+out.case2 <- DESeq(out2)
+out.case3 <- DESeq(out3)
+out.case4 <- DESeq(out4)
+(To organize my results into tables)
+totalres <- results(tcase, tidy=TRUE)
+o.res1 <- results(out.case1, tidy=TRUE)
+o.res2 <- results(out.case2, tidy=TRUE)
+o.res3 <- results(out.case3, tidy=TRUE)
+o.res4 <- results(out.case4, tidy=TRUE)
+(To manipulate my table results and filter out what is needed)
+
 
 
 
