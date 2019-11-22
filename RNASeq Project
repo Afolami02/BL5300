@@ -160,6 +160,11 @@ Case.4<- LinLemb%>%
 read_csv("Counts/metadata.csv")
 choice_metadata<- read_csv("Counts/metadata.csv")
 choice_metadata<- as.data.frame (choice_metadata)
+(To round off values in each case as integers)
+Case.1 <-Case.1 %>% mutate_at(vars(LinL.X, NL.X), funs(round(., 0)))
+Case.2 <-Case.2 %>% mutate_at(vars(Linlemb.X, Nlemb.X), funs(round(., 0)))
+Case.3 <-Case.3 %>% mutate_at(vars(Nlemb.X, NL.X), funs(round(., 0)))
+Case.4 <-Case.4 %>% mutate_at(vars(LinL.X, Linlemb.X), funs(round(., 0)))
 
 
 
