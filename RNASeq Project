@@ -294,15 +294,38 @@ ggplot(case4.mutated) +
   scale_color_manual(values=c("brown", "orange", "green"))
   
 (To create a monovariant file for Venn diagrams and ellipses)
-Ven1a<- filter(case1.mutated, treatment== "control")
-Ven1b<- filter(case1.mutated, treatment== "mutant")
-Ven2a<- filter(case2.mutated, treatment== "control")
-Ven2b<- filter(case2.mutated, treatment== "mutant")
-Ven3a<- filter(case3.mutated, treatment== "control")
-Ven3b<- filter(case3.mutated, treatment== "mutant")
-Ven4a<- filter(case4.mutated, treatment== "control")
+(First filter out the needed rows from the case files to give sub cases for each treatment)
+Ven1a<- filter(case1.mutated, treatment== "NL")
+Ven1b<- filter(case1.mutated, treatment== "LinL")
+Ven2a<- filter(case2.mutated, treatment== "Nlemb")
+Ven2b<- filter(case2.mutated, treatment== "Linlemb")
+Ven3a<- filter(case3.mutated, treatment== "Nlemb")
+Ven3b<- filter(case3.mutated, treatment== "NL")
+Ven4a<- filter(case4.mutated, treatment== "Linlemb")
+Ven4b<- filter(case4.mutated, treatment== "LinL")
+(Then merge each filtered sub treatment cases to give a full unbiased data set)
+Ven.NL<- Ven1a%>%
+  full_join(Ven3b)
+Ven.Nlemb<- Ven2a%>%
+  full_join(Ven3a)
+Ven.LinL<- Ven1b%>%
+  full_join(Ven4a)
+Ven.Linlemb<- Ven2b%>%
+  full_join(Ven4b)
+ 
+(To plot venn diagrams for the unbiased data sets we have for each treatment categories so that they reflect their gene expression levels)
 install.packages("VennDiagram")
 library(VennDiagram)
-(To plot Venn diagrams for gene expression levels) 
+venn.plot <- venn.diagram(list(Ven.NL$row, Ven.LinL$row), NULL, fill=c("red", "blue"), alpha=c(0.25,0.25), cex = 1.5, cat.fontface=3, category.names=c("Mt larvae", "Wt larvae"))
+grid.draw(venn.plot)
+venn.plot <- venn.diagram(list(Ven.Nlemb$row, Ven.Linlemb$row), NULL, fill=c("red", "blue"), alpha=c(0.25,0.25), cex = 1.5, cat.fontface=3, category.names=c("Mt embryo", "Wt embryo"))
+grid.draw(venn.plot)
+venn.plot <- venn.diagram(list(Ven.Nlemb$row, Ven.NL$row), NULL, fill=c("brown", "green"), alpha=c(0.25,0.25), cex = 1.5, cat.fontface=3, category.names=c("Wt embryo", "Wt larvae"))
+grid.draw(venn.plot)
+venn.plot <- venn.diagram(list(Ven.Linlemb$row, Ven.LinL$row), NULL, fill=c("brown", "green"), alpha=c(0.25,0.25), cex = 1.5, cat.fontface=3, category.names=c("Mt embryo", "Mt larvae"))
+grid.draw(venn.plot)
+venn.plot <- venn.diagram(list(Ven.Nlemb$row, Ven.NL$row, Ven.Linlemb$row, Ven.LinL$row), NULL, fill=c("red", "blue", "brown", "green"), alpha=c(0.3,0.3,0.3,0.3), cex = 1.5, cat.fontface=3, category.names=c("Wt embryo", "Wt larvae", "Mt embryo", "Mt larvae"))
+grid.draw(venn.plot)
+
 
 
