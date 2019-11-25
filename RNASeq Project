@@ -255,6 +255,44 @@ case4.downreg <- filter(case4.filtered, padj<=0.05 & log2FoldChange<=-2.0)
 case4.upreg<-mutate(case4.upregulated,significance=ifelse(padj<0.05,"Significant","Non-significant"))
 case4.down<-mutate(case4.downreg,significance=ifelse(padj<0.05,"Significant","Non-significant"))
 
+(To draw volcano plot for each of the cases we have and include both mutant and control gene expression levels)
+tres.mutated<-mutate(tres.mutated,treatment= ifelse(log2FoldChange<=-2 & padj<=0.05,"control",
+                                        ifelse (log2FoldChange>=2 & padj<=0.05, "mutant", "Non-significant")))
+case1.mutated<-mutate(case1.mutated,treatment= ifelse(log2FoldChange<=-2 & padj<=0.05,"NL",
+                                                    ifelse (log2FoldChange>=2 & padj<=0.05, "LinL", "Non-significant")))
+case2.mutated<-mutate(case2.mutated,treatment= ifelse(log2FoldChange<=-2 & padj<=0.05,"Nlemb",
+                                                      ifelse (log2FoldChange>=2 & padj<=0.05, "Linlemb", "Non-significant")))
+case3.mutated<-mutate(case3.mutated,treatment= ifelse(log2FoldChange<=-2 & padj<=0.05,"Nlemb",
+                                                      ifelse (log2FoldChange>=2 & padj<=0.05, "NL", "Non-significant")))
+case4.mutated<-mutate(case4.mutated,treatment= ifelse(log2FoldChange<=-2 & padj<=0.05,"Linlemb",
+                                                      ifelse (log2FoldChange>=2 & padj<=0.05, "LinL", "Non-significant")))
+ggplot(case1.mutated) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj),color=treatment)) +
+  scale_color_manual(values=c("red", "blue", "green"))
+ggplot(case2.mutated) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj),color=treatment)) +
+  scale_color_manual(values=c("red", "blue", "green"))
+ggplot(case3.mutated) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj),color=treatment)) +
+  scale_color_manual(values=c("brown", "orange", "green"))
+ggplot(case4.mutated) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj),color=treatment)) +
+  scale_color_manual(values=c("brown", "orange", "green"))
+  
+(To draw an MA plot for each cases we have and include both mutant and control gene expression levels)
+ggplot(case1.mutated) +
+  geom_point(aes(x=log10(baseMean), y=log2FoldChange,color=treatment)) +
+  scale_color_manual(values=c("red", "blue", "green")
+ggplot(case2.mutated) +
+  geom_point(aes(x=log10(baseMean), y=log2FoldChange,color=treatment)) +
+  scale_color_manual(values=c("red", "blue", "green"))
+ggplot(case3.mutated) +
+  geom_point(aes(x=log10(baseMean), y=log2FoldChange,color=treatment)) +
+  scale_color_manual(values=c("brown", "orange", "green"))
+ggplot(case4.mutated) +
+  geom_point(aes(x=log10(baseMean), y=log2FoldChange,color=treatment)) +
+  scale_color_manual(values=c("brown", "orange", "green"))
+  
 (To create a monovariant file for Venn diagrams and ellipses)
 Ven1a<- filter(case1.mutated, treatment== "control")
 Ven1b<- filter(case1.mutated, treatment== "mutant")
