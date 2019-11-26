@@ -329,8 +329,9 @@ grid.draw(venn.plot)
 (After each plot, use the command "dev.off()" to clean the old plot and get a new plot to avoid overlapp)
 
 (To create box plots for the top 4 highest significantly upregulated and downregulated genes for each hypothesis cases I have)
-
-
+install.packages("ggpubr")
+library(ggpubr)
+(Then plot each gene differentially expressed either upregulated or downregulated; then save as a separate file as a boxplot)
 g1<- plotCounts(out.case1, gene="NM_001269403.1", intgroup="dex", returnData=TRUE) %>%
   ggplot(aes(dex,count))+
   geom_boxplot(aes(fill=dex))+
@@ -371,6 +372,135 @@ g8<- plotCounts(out.case1, gene="NM_001313580.1", intgroup="dex", returnData=TRU
   geom_boxplot(aes(fill=dex))+
   scale_y_log10() + 
   ggtitle("NM_001313580.1")
-ggarrange(g5, g6, g7, g8, common.legend = TRUE)
+(Then merge all the separate box plots into one single grid; that is upregulated and downregulated genes separately. Input the legends separately so the combined picture will not be murky)
+ggarrange(g5,g6,g7,g8, common.legend = FALSE)
 ggarrange(g1, g2, g3, g4, common.legend = TRUE)
+
+(Repeat this loop for all the other three cases)
+B1<- plotCounts(out.case2, gene="NM_171101.3", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_171101.3")
+B2<- plotCounts(out.case2, gene="NM_001267453.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001267453.1")
+B3<- plotCounts(out.case2, gene="NM_001029310.3", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001029310.3")
+B4<- plotCounts(out.case2, gene="NM_001128999.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001128999.1")
+ggarrange(B1,B2,B3,B4, common.legend = FALSE)
+B5<- plotCounts(out.case2, gene="NM_001306566.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001306566.1")
+B6<- plotCounts(out.case2, gene="NM_001276873.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001276873.1")
+B7<- plotCounts(out.case2, gene="NM_001268088.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001268088.1")
+B8<- plotCounts(out.case2, gene="NM_001269606.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001269606.1")
+ggarrange(B5,B6,B7,B8, common.legend = FALSE)
+C1<- plotCounts(out.case3, gene="NM_001268060.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001268060.1")
+C2<- plotCounts(out.case3, gene="NM_001306382.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001306382.1")
+C3<- plotCounts(out.case3, gene="NM_001313045.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001313045.1")
+C4<- plotCounts(out.case3, gene="NM_001307368.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001307368.1")
+ggarrange(C1,C2,C3,C4, common.legend = FALSE)
+C5<- plotCounts(out.case3, gene="NM_182354.4", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_182354.4")
+C6<- plotCounts(out.case3, gene="NR_002353.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NR_002353.1")
+C7<- plotCounts(out.case3, gene="NM_001268222.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001268222.1")
+C8<- plotCounts(out.case3, gene="NM_001026539.3", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001026539.3")
+ggarrange(C5,C6,C7,C8, common.legend = FALSE)
+D1<- plotCounts(out.case4, gene="NM_001038305.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001038305.1")
+D2<- plotCounts(out.case4, gene="NM_001356673.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001356673.1")
+D3<- plotCounts(out.case4, gene="NM_182236.3", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_182236.3")
+D4<- plotCounts(out.case4, gene="NM_001307199.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001307199.1")
+ggarrange(D1,D2,D3,D4, common.legend = FALSE)
+D5<- plotCounts(out.case4, gene="NR_050768.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NR_050768.1")
+D6<- plotCounts(out.case4, gene="NM_001268092.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001268092.1")
+D7<- plotCounts(out.case4, gene="NM_001026947.5", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001026947.5")
+D8<- plotCounts(out.case4, gene="NM_001267927.1", intgroup="dex", returnData=TRUE) %>%
+  ggplot(aes(dex,count))+
+  geom_boxplot(aes(fill=dex))+
+  scale_y_log10() + 
+  ggtitle("NM_001267927.1")
+ggarrange(D5,D6,D7,D8, common.legend = FALSE)
 
